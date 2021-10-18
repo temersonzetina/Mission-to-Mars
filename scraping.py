@@ -4,16 +4,36 @@
 # Import Splinter and BeautifulSoup
 from splinter import Browser
 from bs4 import BeautifulSoup as soup
-from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
+import datetime as dt
+from webdriver_manager.chrome import ChromeDriverManager
 
-# Set up your path and the URL for scraping.
-executable_path = {'executable_path': ChromeDriverManager().install()}
-browser = Browser('chrome', **executable_path, headless=False)
+# Define a new function to begin initializing browser 
+def scrape_all():
+    # Initiate headless driver for deployment
+    executable_path = {'executable_path': ChromeDriverManager().install()}
+    browser = Browser('chrome', **executable_path, headless=True)
+    
+    # Get news title and news paragraph from the browser.
+    news_title, news_paragraph = mars_news(browser)
+
+    # Run all scraping functions and store results in dictionary
+    data = {
+        "news_title": news_title,
+        "news_paragraph": news_paragraph,
+        "featured_image": featured_image(browser),
+        "facts": mars_facts(),
+        "last_modified": dt.datetime.now()
+    }
+
+    # Stop webdriver and return data
+    browser.quit()
+    return data
 
 # Create a function to run/rerun this code as needed.
 def mars_news(browser):
 
+    # Scrape Mars News
     # Visit the mars nasa news site
     url = 'https://redplanetscience.com'
     browser.visit(url)
@@ -21,14 +41,13 @@ def mars_news(browser):
     # Optional delay for loading the page
     browser.is_element_present_by_css('div.list_text', wait_time=1)
 
-    # Set up HTML parser.
+    # Convert the browser html to a soup object and then quit the browser
     html = browser.html
     news_soup = soup(html, 'html.parser')
-    slide_elem = news_soup.select_one('div.list_text')
 
+    # Add try/except for error handling
     try:
-        # Begin scraping by looking for content title (title of the article).
-        slide_elem.find('div', class_='content_title')
+        slide_elem = news_soup.select_one('div.list_text')
 
         # Use the parent element to find the first 'a' tag and save it as the news title.
         news_title = slide_elem.find('div', class_='content_title').get_text()
@@ -44,12 +63,12 @@ def mars_news(browser):
 
 # ### Featured Images
 
-# Visit URL
-url = 'https://spaceimages-mars.com'
-browser.visit(url)
-
 # Define a function to run this code regularly.
 def featured_image(browser):
+
+    # Visit URL
+    url = 'https://spaceimages-mars.com'
+    browser.visit(url)
 
     # Find and click the full size image button.
     full_image_elem = browser.find_by_tag('button')[1]
@@ -62,6 +81,7 @@ def featured_image(browser):
     try:
         # Find the relative - or latest - image URL
         img_url_rel = img_soup.find('img', class_='fancybox-image').get('src')
+   
     except AttributeError:
         return None
 
@@ -70,7 +90,7 @@ def featured_image(browser):
 
     return img_url
 
-    # Define the function to return a table.
+# Define the function to return a table.
 def mars_facts():
     try: 
         # Use read_html to scrape the facts into a dataframe. 
@@ -83,10 +103,11 @@ def mars_facts():
     df.set_index('description', inplace=True)
 
     # Convert dataframe into HTML object, using bootstrap.
-    return df.to_html()
+    return df.to_html(classes="table table-striped")
 
-    browser.quit()
-
-
+if __name__ == "__main__":
+    
+    # If running as script, print scraped data
+    print(scrape_all())
 
 
