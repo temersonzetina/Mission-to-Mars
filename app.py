@@ -1,12 +1,6 @@
 
 # Import dependencies.
 
-# Import Splinter and BeautifulSoup
-from splinter import Browser
-from bs4 import BeautifulSoup as soup
-from webdriver_manager.chrome import ChromeDriverManager
-import pandas as pd
-
 # Enable Flask to create a template and a URL for your site.
 from flask import Flask, render_template, redirect, url_for
 
