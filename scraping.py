@@ -23,7 +23,8 @@ def scrape_all():
         "news_paragraph": news_paragraph,
         "featured_image": featured_image(browser),
         "facts": mars_facts(),
-        "last_modified": dt.datetime.now()
+        "last_modified": dt.datetime.now(),
+        "hemispheres": mars_hemispheres(browser)
     }
 
     # Stop webdriver and return data
@@ -104,6 +105,114 @@ def mars_facts():
 
     # Convert dataframe into HTML object, using bootstrap.
     return df.to_html(classes="table table-striped")
+
+def mars_hemispheres(browser):
+
+    # 1. Use browser to visit the URL
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+
+    # Parse the resulting html with soup.
+    html = browser.html
+    img_soup = soup(html, 'html.parser')
+    slide_elem = img_soup.select_one('div.list_text')
+
+    #2. Create a list to hold the images and titles.
+    hemisphere_image_urls = []
+    hemisphere_image_urls
+
+    # 3. Write code to retrieve the image urls and titles for each hemisphere.
+
+    ### IMAGE 1 ###
+
+    # Go to the sub-page for Image 1.
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+    full_image_site = browser.find_by_tag('a')[4]
+    full_image_site.click()
+    # Parse the resulting html with soup.
+    html = browser.html
+    img_soup = soup(html, 'html.parser')
+
+    # Scrape the image and title.
+    img1_url_rel = img_soup.find('img', class_='wide-image').get('src')
+    img1_url = f'https://marshemispheres.com/{img1_url_rel}'
+    img1_title = img_soup.body.find('h2').text
+
+    # Create dictionary
+    hemisphere1 = {'img_url':img1_url, 'title':img1_title}
+    hemisphere_image_urls.append(hemisphere1)
+    hemisphere_image_urls
+
+    ### IMAGE 2 ###
+
+    # Go to the sub-page for Image 2.
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+    full_image_site = browser.find_by_tag('a')[6]
+    full_image_site.click()
+    # Parse the resulting html with soup.
+    html = browser.html
+    img_soup = soup(html, 'html.parser')
+
+    # Scrape the image and title.
+    img2_url_rel = img_soup.find('img', class_='wide-image').get('src')
+    img2_url = f'https://marshemispheres.com/{img2_url_rel}'
+    img2_title = img_soup.body.find('h2').text
+
+    # Create dictionary
+    hemisphere2 = {'img_url':img2_url, 'title':img2_title}
+    hemisphere_image_urls.append(hemisphere2)
+    hemisphere_image_urls
+
+    ### IMAGE 3 ###
+
+    # Go to the sub-page for Image 3.
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+    full_image_site = browser.find_by_tag('a')[8]
+    full_image_site.click()
+    # Parse the resulting html with soup.
+    html = browser.html
+    img_soup = soup(html, 'html.parser')
+
+    # Scrape the image and title.
+    img3_url_rel = img_soup.find('img', class_='wide-image').get('src')
+    img3_url = f'https://marshemispheres.com/{img3_url_rel}'
+    img3_title = img_soup.body.find('h2').text
+
+    # Create dictionary
+    hemisphere3 = {'img_url':img3_url, 'title':img3_title}
+    hemisphere_image_urls.append(hemisphere3)
+    hemisphere_image_urls
+
+    ### IMAGE 4 ###
+
+    # Go to the sub-page for Image 4.
+    url = 'https://marshemispheres.com/'
+    browser.visit(url)
+    full_image_site = browser.find_by_tag('a')[10]
+    full_image_site.click()
+    # Parse the resulting html with soup.
+    html = browser.html
+    img_soup = soup(html, 'html.parser')
+
+    # Scrape the image and title.
+    img4_url_rel = img_soup.find('img', class_='wide-image').get('src')
+    img4_url = f'https://marshemispheres.com/{img4_url_rel}'
+    img4_title = img_soup.body.find('h2').text
+
+    # Create dictionary
+    hemisphere4 = {'img_url':img4_url, 'title':img4_title}
+    hemisphere_image_urls.append(hemisphere4)
+
+    # Add dictionaries to URL list.
+    hemisphere_image_urls = [hemisphere1, hemisphere2, hemisphere3, hemisphere4]
+
+    # 4. Print dictionary items.
+    return hemisphere_image_urls
+
+# hemispheres = dict(hemisphere_image_urls)
 
 if __name__ == "__main__":
     

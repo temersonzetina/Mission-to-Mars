@@ -9,12 +9,19 @@
         rel="stylesheet" 
         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
     />
+    <style>
+        .container-fluid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit);
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="jumbotron text-center">
             <h1>Mission to Mars</h1>
-            <p><a class="btn-primary btn-lg" href="/scrape" 
+            <p><a class="btn-primary btn-lg active" href="/scrape" 
                         role="button">Scrape New Data?</a>
             </p>
         </div>
@@ -41,10 +48,27 @@
                     alt="Responsive image"
                 />
             </div>
+            <!-- Mars Facts -->
             <div class="col-md-4">
                 <div class="row" id="mars-facts">
                     <h4>Mars Facts</h4>
                     {{ mars.facts | safe }}
+                </div>
+            </div>
+        </div>
+        <!-- Mars Hemispheres -->
+        <div class="container-fluid" id="hemispheres">
+            <div class="row" style="text-align: center;">
+                <div>
+                <h2>Mars Hemispheres</h2>
+                    <ul style="list-style: grid-row: inherit;">
+                        {% for hemisphere in mars.hemispheres %}
+                        <li class="thumbnail col-md-6">
+                            <img src= "{{ hemisphere.img_url }}" class="img-responsive" />
+                            <p> {{ hemisphere.title }} </p>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
